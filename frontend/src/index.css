@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   BASE STYLES
+========================= */
+@layer base {
+  body {
+    @apply bg-bg text-textPrimary min-h-screen;
+  }
+
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
+/* =========================
+   COMPONENTS
+========================= */
+@layer components {
+
+  /* Glassmorphism */
+  .glass,
+  .glass-dark {
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    @apply border border-border/60 shadow-2xl;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-primary-gradient text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-neon/20 transform hover:-translate-y-1 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-neon/50 focus:ring-offset-0;
+  }
+
+  .btn-secondary {
+    @apply bg-bgSecondary/80 hover:bg-card text-textPrimary font-semibold py-3 px-8 rounded-xl transition-all duration-300 border-2 border-border hover:border-primary-500/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30;
+  }
+
+  .btn-accent {
+    @apply bg-accent-500 hover:bg-accentHover text-white font-bold py-3 px-8 rounded-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-accent-500/20 transform hover:-translate-y-1 active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-accent-400/60;
+  }
+
+  /* Card */
+  .card {
+    @apply glass-dark rounded-2xl p-6 shadow-xl hover:shadow-neon/10 transition-all duration-300 border-2 border-border/60 hover:border-primary-500/30 transform hover:-translate-y-1;
+  }
+
+  /* Input */
+  .input-field {
+    @apply w-full px-4 py-3 bg-card border-2 border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500/50 text-textPrimary placeholder-textMuted backdrop-blur-sm transition-all duration-300;
+  }
+
+  /* Container */
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* =========================
+   UTILITIES
+========================= */
+@layer utilities {
+  .bg-primary-gradient {
+    @apply bg-gradient-to-r from-primary-400 to-primary-600;
+  }
+
+  .transition-scale {
+    @apply transition-transform duration-300 ease-in-out;
+  }
+
+  .transition-fade {
+    @apply transition-opacity duration-300 ease-in-out;
+  }
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-bgSecondary;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+/* =========================
+   MODAL BACKDROP
+========================= */
+.modal-backdrop {
+  @apply fixed inset-0 bg-slate-900/30 backdrop-blur-sm grid place-items-center z-[100];
+}
