@@ -32,11 +32,17 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   "https://jkelectrical.vercel.app",
-  "http://localhost:3000" // for local development (Vite default port)
+  "http://localhost:5173" // for local development (Vite default port)
 ];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
