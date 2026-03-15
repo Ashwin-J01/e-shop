@@ -31,18 +31,12 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  "https://e-shop-j1n53i55d-ashwins-projects-a1947f1d.vercel.app",
-  "http://localhost:3000", // for local development
+  "https://jkelectrical.vercel.app",
+  "http://localhost:3000" // for local development (Vite default port)
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: allowedOrigins,
   credentials: true
 }));
 app.use(express.json());
