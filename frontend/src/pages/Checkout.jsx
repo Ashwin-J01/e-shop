@@ -38,6 +38,16 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error('Failed to load Razorpay script'));
+      document.body.appendChild(script);
+    });
+  };
+
   const handleCreateOrder = async () => {
     if (!formData.name || !formData.phone || !formData.address) {
       toast.error('Please fill all fields');
@@ -46,20 +56,59 @@ const Checkout = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post('/api/orders', {
+
+      // Step 1: Create order in our database
+      const orderResponse = await axios.post('/api/orders', {
         shippingAddress: formData,
       });
-      const createdOrderId = response.data.order._id;
+      const createdOrderId = orderResponse.data.order._id;
 
-      // Mark payment successful and send order confirmation email (no admin step)
-      await axios.post('/api/payments/demo-complete', { orderId: createdOrderId });
+      // Step 2: Create Razorpay order
+      const paymentResponse = await axios.post('/api/payments/create-order', {
+        orderId: createdOrderId,
+      });
 
-      await clearCart();
-      await fetchCart();
-      toast.success('Payment successful! Order details sent to your email.');
-      navigate('/orders', { state: { orderId: createdOrderId } });
+      // Step 3: Load Razorpay script
+      await loadRazorpayScript();
+
+      // Step 4: Open Razorpay payment window
+      const options = {
+        key: paymentResponse.data.key,
+        amount: paymentResponse.data.amount,
+        currency: paymentResponse.data.currency,
+        order_id: paymentResponse.data.orderId,
+        handler: async (response) => {
+          try {
+            // Step 5: Verify payment
+            await axios.post('/api/payments/verify', {
+              orderId: createdOrderId,
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpaySignature: response.razorpay_signature,
+            });
+
+            await clearCart();
+            await fetchCart();
+            toast.success('Payment successful! Order details sent to your email.');
+            navigate('/orders', { state: { orderId: createdOrderId } });
+          } catch (verifyError) {
+            toast.error('Payment verification failed. Please contact support.');
+            console.error('Verification error:', verifyError);
+          }
+        },
+        prefill: {
+          name: formData.name,
+          contact: formData.phone,
+        },
+        theme: {
+          color: '#3b82f6',
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to create order');
+      toast.error(error.response?.data?.message || 'Failed to process payment');
+      console.error('Order error:', error);
     } finally {
       setLoading(false);
     }

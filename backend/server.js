@@ -5,7 +5,15 @@ import dotenv from 'dotenv';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, '.env') });
+const envPath = path.join(__dirname, '.env');
+console.log('Loading .env from:', envPath);
+const result = dotenv.config({ path: envPath });
+if (result.error) {
+  console.error('❌ Error loading .env:', result.error);
+} else {
+  console.log('✅ .env loaded successfully');
+  console.log('   RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID ? 'SET' : 'NOT SET');
+}
 
 import express from 'express';
 import mongoose from 'mongoose';
