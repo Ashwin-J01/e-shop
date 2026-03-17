@@ -25,7 +25,7 @@ import AdminOrders from './pages/admin/Orders';
 
 function AppContent() {
   const { isAdmin } = useAuth();
-  
+
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
@@ -37,8 +37,8 @@ function AppContent() {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
-          
+
+
           <Route
             path="/cart"
             element={
@@ -71,7 +71,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/admin/dashboard"
             element={
@@ -96,7 +96,7 @@ function AppContent() {
               </ProtectedRoute>
             }
           />
-          
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
