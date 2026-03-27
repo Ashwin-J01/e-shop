@@ -93,7 +93,7 @@ const Home = () => {
               transition={{ delay: 0.1, duration: 0.6 }}
               className="text-6xl md:text-8xl font-extrabold mb-6 bg-gradient-to-r from-primary-300 via-primary-400 to-primary-500 bg-clip-text text-transparent leading-tight drop-shadow-2xl"
             >
-              JK Electrical & Hardwares
+              JK Electricals & Hardwares
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
