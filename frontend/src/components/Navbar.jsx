@@ -50,7 +50,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-4">
           <Link to={isAdmin ? "/admin/dashboard" : "/"} className="text-2xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent whitespace-nowrap">
-            JK Electrical & Hardwares
+            JK Electricals & Hardwares
           </Link>
 
           {/* Search Box - Only for customers (not logged in or customer role) */}
